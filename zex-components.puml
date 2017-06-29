@@ -1,0 +1,38 @@
+@startuml
+
+package "Zex" {
+Pipeline --> [Pipeliner]
+Subscribe <-- [Scheduler]
+
+[Scheduler] <-right- [Pipeliner]: do new pipe
+
+[Pipeliner] -down-> [Registrer] : validate
+
+[Scheduler] <--> [Registrer] : lookup grpc
+[Scheduler] <--> grpc
+
+[Registrer] <-- grpc
+}
+
+package "MiddleLayer" {
+    [serviceObjectFunction] --> Pipeline : write pipe
+    [serviceObjectFunction] <-- Subscribe: when done
+}
+
+
+package "Srv1" {
+    ["srv1.reflection"] -up-> grpc : registry
+    grpc <-..right-> ["Srv1.GetSomething"] : call
+    grpc <-..right-> ["Srv1.PutSomething"] : call
+}
+
+
+
+package "Srv2" {
+    ["srv2.reflection"] -up-> grpc : registry
+    grpc <-..right-> ["Srv2.GetSomething"] : call
+    grpc <-..right-> ["Srv2.PutSomething"] : call
+}
+
+
+@enduml
