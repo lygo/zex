@@ -20,7 +20,7 @@ Zex позволяет использовать grpc сервисы, котор�
 
 Возможно так zex ьбудет уметь испольнять аля serviceless
 
-![](./zex-components.svg)
+![](https://rawgithub.com/lygo/zex/blob/master/doc/overview/zex-components.svg)
 
 
 ## Слои
