@@ -1,0 +1,40 @@
+syntax="proto3";
+
+package zex;
+
+
+message StakArgs {
+
+}
+
+message TaskConfig {
+    // retry
+    // output
+    // mem/disk/-
+}
+
+message Task {
+    string Type = 1;
+
+    string Path = 2;
+
+    bytes Body = 3;
+    // need for connect to other calls
+    StakArgs Scope = 4;
+
+    TaskConfig Config = 5;
+
+}
+
+message Pipeline {
+    string ID=1;
+}
+
+message Empty {}
+
+service Pipeliner {
+    /*
+    позволяет открыть пайп и
+    */
+    rpc Open(stream Task) returns (Pipeline) {};
+}

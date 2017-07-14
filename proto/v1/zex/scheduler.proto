@@ -1,0 +1,59 @@
+syntax="proto3";
+
+package zex;
+
+enum Subscription {
+    Pipeline = 0;
+    Task = 1;
+}
+
+message Query {
+    Pipeline Pipeline = 1;
+    // если тип Pipeline - вы подписываетесь на события пайпа
+    // - запущен
+    // - retry
+    // - cancel
+    // - done
+    // если тип Task - вы подписываетесь также на события и пайпа и задач
+    Subscription Type = 2;
+    // если флаг стоит значит вы получите при событии task done и ссылку на его результат
+    // возможно если артефакт больше M, мы будем возврахать его ID
+    bool WithOutArtefact = 3;
+}
+
+message ErrorMesssage {
+    int32 Code=1;
+    string message=2;
+}
+
+message Answer {
+    Subscription Type = 1;
+    // taskPath => out
+    //  если есть только ArtefactObject.ID - значит нужно будет запросить отдельно его Artefact()
+    map<string,ArtefactObject> Out = 2;
+    ErrorMesssage Error =3;
+}
+
+message Pipeline {
+    string ID=1;
+}
+
+message ArtefactObject {
+    string ID=1;
+    bytes Data=2;
+}
+
+message Empty {}
+
+service Scheduler {
+    // запускает задачу
+    rpc Do(Pipeline) returns (Empty) {};
+    // отменяет выполнение пайпа
+    rpc Cancel(Pipeline) returns (Empty) {};
+
+    rpc Subscribe(Query) returns (Answer) {};
+
+    rpc Subscriber(stream Query) returns (stream Answer) {};
+
+    rpc Artefact(ArtefactObject) returns (ArtefactObject) {};
+}
