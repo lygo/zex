@@ -1,10 +1,11 @@
 @startuml
+scale 700 width
 
 package "Zex" {
 Pipeline --> [Pipeliner]
 Subscribe <-- [Scheduler]
 
-[Scheduler] <-right- [Pipeliner]: do new pipe
+[Scheduler] <-right- [Pipeliner]: do/cancel pipe-id
 
 [Pipeliner] -down-> [Registrer] : validate
 

@@ -1,0 +1,17 @@
+syntax="proto3";
+
+package zex;
+
+// нужен для валидации
+message ServicePath {
+    string Uri = 1;
+}
+
+message Service {
+    string Adrress = 1;
+}
+
+service Register {
+    rpc Registry(Service) returns (Empty) {};
+    rpc Validate(ServicePath) returns (Empty) {};
+}
